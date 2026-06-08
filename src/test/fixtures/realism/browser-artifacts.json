@@ -1,0 +1,10 @@
+{
+  "started": true,
+  "reachedLiveField": true,
+  "reachedHalftime": true,
+  "reachedResult": true,
+  "screenshots": ["start.png", "live.png", "result.png"],
+  "recordingPath": "demo.webm",
+  "notes": []
+}
+

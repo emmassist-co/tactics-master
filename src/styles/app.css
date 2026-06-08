@@ -1,0 +1,300 @@
+/* Hallmark · pre-emit critique: P5 H4 E4 S4 R4 V4 */
+:root {
+  --color-ink: #f7efe3;
+  --color-muted: rgba(247, 239, 227, 0.76);
+  --color-panel: rgba(17, 13, 15, 0.78);
+  --color-panel-strong: rgba(28, 22, 26, 0.92);
+  --color-outline: rgba(247, 239, 227, 0.12);
+  --color-accent: #f4b24e;
+  --color-accent-strong: #ee7d3a;
+  --color-home: #f3c46c;
+  --color-away: #d55e45;
+  --color-field: #2f5d3c;
+  --color-field-deep: #213f2b;
+  --font-body: "Avenir Next", "Segoe UI", sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(circle at 20% 12%, rgba(244, 178, 78, 0.26), transparent 22%),
+    radial-gradient(circle at 80% 0%, rgba(213, 94, 69, 0.17), transparent 26%),
+    linear-gradient(180deg, #1a1418 0%, #120e10 42%, #090809 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+html {
+  overflow-x: clip;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  position: relative;
+}
+
+.app-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 28px, 28px 100%;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 80%);
+}
+
+.panel,
+.match-shell {
+  width: min(960px, 100%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%),
+    var(--color-panel);
+  border: 1px solid var(--color-outline);
+  border-radius: 32px;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.38);
+  padding: 28px;
+  backdrop-filter: blur(18px);
+  position: relative;
+}
+
+.panel::before,
+.match-shell::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+
+.hero {
+  text-align: center;
+  padding: 52px 34px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  color: var(--color-accent);
+  margin: 0 0 12px;
+}
+
+h1,
+h2,
+h3,
+.scoreline {
+  font-family: var(--font-display);
+}
+
+h1,
+h2 {
+  margin: 0 0 12px;
+  font-size: clamp(2.3rem, 4vw, 3.9rem);
+  line-height: 0.95;
+  text-wrap: balance;
+}
+
+.lede {
+  color: var(--color-muted);
+  max-width: 56ch;
+  margin: 0 auto 24px;
+  line-height: 1.5;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-strong));
+  color: #130f10;
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 24px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(238, 125, 58, 0.28);
+}
+
+.prompt-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.prompt-header,
+.prompt-footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hand-off-chip,
+.result-ribbon,
+.match-progress {
+  align-self: flex-start;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-muted);
+  padding: 8px 12px;
+  font-size: 0.82rem;
+}
+
+.prompt-ideas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.prompt-idea {
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(244, 178, 78, 0.08);
+  border: 1px solid rgba(244, 178, 78, 0.18);
+  color: var(--color-ink);
+  font-size: 0.88rem;
+}
+
+.prompt-input {
+  width: 100%;
+  min-height: 210px;
+  resize: vertical;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
+    rgba(245, 241, 232, 0.05);
+  color: inherit;
+  padding: 18px 20px;
+  line-height: 1.45;
+}
+
+.prompt-note {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+}
+
+.summary-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin: 20px 0 28px;
+}
+
+.scoreline {
+  font-size: 3rem;
+  margin: 6px 0 18px;
+}
+
+.result-panel {
+  text-align: center;
+  overflow: hidden;
+}
+
+.result-ribbon {
+  display: inline-flex;
+  margin-bottom: 14px;
+}
+
+.result-ribbon.is-home-win {
+  background: linear-gradient(135deg, rgba(243, 196, 108, 0.22), rgba(240, 170, 61, 0.08));
+  color: #1e1811;
+}
+
+.result-ribbon.is-away-win {
+  background: linear-gradient(135deg, rgba(213, 94, 69, 0.24), rgba(171, 52, 40, 0.1));
+  color: #fff4ef;
+}
+
+.winner-burst {
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  animation: result-flare 1s ease-out both;
+}
+
+.winner-burst span {
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.24);
+}
+
+.winner-burst.home span {
+  background: linear-gradient(135deg, #f7d274, #f0aa3d);
+  color: #171113;
+}
+
+.winner-burst.away span {
+  background: linear-gradient(135deg, #e36c55, #c64536);
+  color: #fff7f3;
+}
+
+.result-panel.is-home-win::after,
+.result-panel.is-away-win::after {
+  content: "";
+  position: absolute;
+  inset: -30% 20% auto;
+  height: 220px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(36px);
+  opacity: 0.48;
+}
+
+.result-panel.is-home-win::after {
+  background: radial-gradient(circle, rgba(243, 196, 108, 0.34), transparent 70%);
+}
+
+.result-panel.is-away-win::after {
+  background: radial-gradient(circle, rgba(213, 94, 69, 0.34), transparent 70%);
+}
+
+@keyframes result-flare {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.94);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    padding: 14px;
+  }
+
+  .panel,
+  .match-shell {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .prompt-header,
+  .prompt-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "mutablePrefixes": [
+    "src/domain/match-v2/",
+    "src/domain/match/",
+    "src/domain/reasoning/"
+  ],
+  "mutableFiles": [
+    "src/domain/match-v2/tuning.json",
+    "src/domain/match-v2/tuning.ts"
+  ],
+  "protectedPrefixes": [
+    "src/test/",
+    "src/domain/realism/",
+    "src/components/",
+    "src/styles/",
+    "docs/",
+    "scripts/optimizer/",
+    "scripts/run-coach-matchups.mjs",
+    "scripts/run-realism-loop.mjs",
+    "scripts/run-realism-browser-check.mjs",
+    "scripts/optimize-match-sim.mjs",
+    "README.md"
+  ]
+}

@@ -1,0 +1,57 @@
+import tuning from "./tuning.json";
+
+export interface MatchTuning {
+  looseBallChaseDistance: number;
+  carrierForwardStepHighRisk: number;
+  carrierForwardStepBase: number;
+  carrierLaneDrift: number;
+  defensiveEngageDistance: number;
+  defensiveBallOffset: number;
+  defensiveAnchorYBias: number;
+  defensiveRunnerYBias: number;
+  defensiveRetreatBase: number;
+  defensiveRoleDepthFactor: number;
+  defensiveLaneShift: number;
+  runnerLaneWideBias: number;
+  teamLaneBias: number;
+  neutralRunnerLaneBias: number;
+  forwardBoxCrashXHome: number;
+  forwardBoxCrashXAway: number;
+  forwardBoxCrashDepth: number;
+  speedCarrier: number;
+  speedAttacking: number;
+  speedPressing: number;
+  speedContain: number;
+  pressureRadius: number;
+  pressureMaxPlayers: number;
+  carryTackleCloseDistance: number;
+  carryTackleMidDistance: number;
+  carryTackleHighRisk: number;
+  carryTackleMidRisk: number;
+  carryTackleLowRisk: number;
+  passInterceptCloseDistance: number;
+  passInterceptMidDistance: number;
+  passInterceptHighChance: number;
+  passInterceptMidChance: number;
+  passInterceptLowChance: number;
+  passAdvanceClear: number;
+  passAdvanceSwitch: number;
+  passAdvanceHighRisk: number;
+  passAdvanceBase: number;
+  passTransitStartProgress: number;
+  passTransitStep: number;
+  passInterceptResolveDistance: number;
+  shotClosenessVeryNear: number;
+  shotClosenessNear: number;
+  shotClosenessMid: number;
+  shotClosenessFar: number;
+  shotPressurePenaltyTight: number;
+  shotPressurePenaltyNear: number;
+  shotPressurePenaltyFar: number;
+  shotSupportBonusPerRunner: number;
+  shotRiskBonusHigh: number;
+  shotScoreThreshold: number;
+  shotBlockDistance: number;
+}
+
+export const MATCH_TUNING = tuning as MatchTuning;
