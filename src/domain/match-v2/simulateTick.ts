@@ -36,9 +36,9 @@ function laneWeight(role: PlayerRole): number {
 function verticalPull(player: { role: PlayerRole }, ballY: number): number {
   if (player.role === "keeper") return 0;
   if (player.role === "anchor") return (ballY - laneY(player.role)) * 0.1;
-  if (player.role === "link") return (ballY - laneY(player.role)) * 0.18;
-  if (player.role === "runner") return (ballY - laneY(player.role)) * 0.14;
-  return (ballY - laneY(player.role)) * 0.1;
+  if (player.role === "link") return (ballY - laneY(player.role)) * 0.14;
+  if (player.role === "runner") return (ballY - laneY(player.role)) * 0.1;
+  return (ballY - laneY(player.role)) * 0.08;
 }
 
 function teamReferenceX(state: MatchState, side: "home" | "away") {
@@ -170,7 +170,7 @@ function targetForPlayer(
   const boxCrash = player.role === "forward" && ball.x > MATCH_TUNING.forwardBoxCrashXHome && player.side === "home";
   const awayBoxCrash = player.role === "forward" && ball.x < MATCH_TUNING.forwardBoxCrashXAway && player.side === "away";
   const preferredReceiverPush = player.role === ownDecision.preferredReceiverRole ? 0.45 : 0;
-  const referenceX = teamReferenceX(state, player.side) * 0.45 + ball.x * 0.55;
+  const referenceX = teamReferenceX(state, player.side) * 0.65 + ball.x * 0.35;
   return {
     x: clamp(
       referenceX +
