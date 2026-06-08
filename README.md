@@ -19,6 +19,22 @@ node scripts/run-coach-matchups.mjs
 node scripts/optimize-match-sim.mjs
 ```
 
+## Preview deploys
+
+GitHub Actions publishes the app to GitHub Pages on every push to `main` and every pull request update.
+
+- Production-style review target: `https://emmassist-co.github.io/tactics-master/`
+- PR preview target: `https://emmassist-co.github.io/tactics-master/previews/pr-<PR_NUMBER>/`
+
+Reviewers can open the PR-specific URL directly after the `Preview Deploy` workflow finishes. The workflow job summary also prints the exact deployed URL for that run.
+
+To reproduce a preview build locally, run:
+
+```bash
+PREVIEW_BASE_PATH=/tactics-master/previews/pr-123/ pnpm build
+pnpm preview
+```
+
 ## Optional live AI configuration
 
 The app now supports an OpenRouter-backed team-turn reasoning provider. Without credentials it falls back to a bounded local provider, so the match still runs.

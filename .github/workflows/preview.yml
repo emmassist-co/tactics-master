@@ -1,0 +1,82 @@
+name: Preview Deploy
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      PAGES_BRANCH: gh-pages
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Compute deploy target
+        id: target
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base_path="/tactics-master/previews/pr-${{ github.event.pull_request.number }}/"
+            preview_url="https://emmassist-co.github.io/tactics-master/previews/pr-${{ github.event.pull_request.number }}/"
+          else
+            base_path="/tactics-master/"
+            preview_url="https://emmassist-co.github.io/tactics-master/"
+          fi
+
+          echo "base_path=${base_path}" >> "$GITHUB_OUTPUT"
+          echo "preview_url=${preview_url}" >> "$GITHUB_OUTPUT"
+
+      - name: Build app
+        env:
+          PREVIEW_BASE_PATH: ${{ steps.target.outputs.base_path }}
+        run: pnpm build
+
+      - name: Deploy PR preview to GitHub Pages branch
+        if: github.event_name == 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: ${{ env.PAGES_BRANCH }}
+          publish_dir: ./dist
+          destination_dir: previews/pr-${{ github.event.pull_request.number }}
+          keep_files: true
+
+      - name: Deploy main site to GitHub Pages branch
+        if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: ${{ env.PAGES_BRANCH }}
+          publish_dir: ./dist
+          keep_files: true
+
+      - name: Publish deploy summary
+        run: |
+          {
+            echo "## Preview deploy"
+            echo
+            echo "URL: ${{ steps.target.outputs.preview_url }}"
+          } >> "$GITHUB_STEP_SUMMARY"
