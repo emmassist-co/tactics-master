@@ -51,12 +51,18 @@ if (url) {
 const traceReport = JSON.parse(await fs.readFile(reportPath, "utf8"));
 const browserReview = browserReviewPath ? JSON.parse(await fs.readFile(browserReviewPath, "utf8")) : null;
 
-console.log(JSON.stringify({
+const summary = {
   ready: traceReport.ready,
   overall: traceReport.overall,
   categories: Object.fromEntries(Object.entries(traceReport.traceScore.categories).map(([key, value]) => [key, value.score])),
   failedCategories: traceReport.traceScore.failedCategories,
   browserReview,
   reportPath,
-}, null, 2));
+};
+
+console.log(JSON.stringify(summary, null, 2));
+
+if (!summary.ready) {
+  process.exitCode = 1;
+}
 
