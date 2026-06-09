@@ -1,4 +1,6 @@
 import { execFileSync } from "node:child_process";
+import os from "node:os";
+import path from "node:path";
 import { readFile } from "node:fs/promises";
 
 const args = new Map(
@@ -8,28 +10,48 @@ const args = new Map(
   }),
 );
 
-const outPath = args.get("--out") || "/private/tmp/tactics-master-coach-matchups.json";
+const outPath = args.get("--out") || path.join(os.tmpdir(), "tactics-master-coach-matchups.json");
 
-execFileSync(
-  "pnpm",
-  ["vitest", "run", "src/test/acceptance/coachMatchups.acceptance.test.ts"],
-  {
-    encoding: "utf8",
-    stdio: "inherit",
-    env: {
-      ...process.env,
-      COACH_MATCHUPS_REPORT_PATH: outPath,
-    },
-  },
-);
+function runPnpm(args) {
+  try {
+    execFileSync("pnpm", args, {
+      cwd: process.cwd(),
+      env: {
+        ...process.env,
+        COACH_MATCHUPS_REPORT_PATH: outPath,
+      },
+      stdio: "inherit",
+    });
+  } catch (error) {
+    if (error?.code !== "ENOENT") {
+      throw error;
+    }
+
+    execFileSync("corepack", ["pnpm", ...args], {
+      cwd: process.cwd(),
+      env: {
+        ...process.env,
+        COACH_MATCHUPS_REPORT_PATH: outPath,
+      },
+      stdio: "inherit",
+    });
+  }
+}
+
+runPnpm(["vitest", "run", "src/test/acceptance/coachMatchups.acceptance.test.ts"]);
 
 const payload = JSON.parse(await readFile(outPath, "utf8"));
+const summary = {
+  ready: payload.readyCount === payload.results.length,
+  readyCount: payload.readyCount,
+  totalMatchups: payload.results.length,
+  averageOverall: payload.averageOverall,
+  categoryAverages: payload.categoryAverages,
+  outPath,
+};
 
-console.log(`coach matchup suite: ${payload.readyCount}/${payload.results.length} ready`);
-console.log(`average overall: ${payload.averageOverall}/5`);
-for (const result of payload.results) {
-  console.log(
-    `${result.matchupId}: ${result.homeCoach} vs ${result.awayCoach} -> ${result.winner} ${result.finalScore.home}-${result.finalScore.away} overall ${result.overall}/5 shots-on-goal ${result.shotsOnGoalEvents}`,
-  );
+console.log(JSON.stringify(summary, null, 2));
+
+if (!summary.ready) {
+  process.exitCode = 1;
 }
-console.log(outPath);
