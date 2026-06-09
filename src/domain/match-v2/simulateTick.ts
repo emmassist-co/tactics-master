@@ -47,6 +47,10 @@ function teamReferenceX(state: MatchState, side: "home" | "away") {
   return outfield.reduce((sum, player) => sum + player.position.x, 0) / outfield.length;
 }
 
+function sideProgress(side: "home" | "away", x: number): number {
+  return side === "home" ? x : 12 - x;
+}
+
 function stepValue(current: number, target: number, speed: number): number {
   return current + (target - current) * speed;
 }
@@ -147,6 +151,22 @@ function targetForPlayer(
   }
 
   const supportDepth = roleDepth(player.role);
+  const carrier = state.carrierId ? playerById(state, state.carrierId) : undefined;
+  const buildOutFrame = Boolean(
+    carrier &&
+      carrier.side === player.side &&
+      (carrier.role === "keeper" || sideProgress(player.side, ball.x) < 3.8),
+  );
+  const buildOutStretch =
+    buildOutFrame && player.role !== "keeper"
+      ? player.role === "anchor"
+        ? -0.25
+        : player.role === "runner"
+          ? 0.35
+          : player.role === "forward"
+            ? 0.55
+            : 0.12
+      : 0;
   const supportDepthOffset =
     ownDecision.objective === "retain"
       ? Math.min(supportDepth, supportDepth * 0.45)
@@ -154,7 +174,7 @@ function targetForPlayer(
         ? supportDepth * 0.85
         : ownDecision.objective === "finish"
           ? supportDepth + 0.45
-          : supportDepth;
+          : supportDepth + buildOutStretch;
   const laneBias =
     player.role === "runner"
       ? ownDecision.targetZone === "left"
@@ -170,7 +190,8 @@ function targetForPlayer(
   const boxCrash = player.role === "forward" && ball.x > MATCH_TUNING.forwardBoxCrashXHome && player.side === "home";
   const awayBoxCrash = player.role === "forward" && ball.x < MATCH_TUNING.forwardBoxCrashXAway && player.side === "away";
   const preferredReceiverPush = player.role === ownDecision.preferredReceiverRole ? 0.45 : 0;
-  const referenceX = teamReferenceX(state, player.side) * 0.65 + ball.x * 0.35;
+  const ballInfluence = buildOutFrame ? 0.18 : 0.35;
+  const referenceX = teamReferenceX(state, player.side) * (1 - ballInfluence) + ball.x * ballInfluence;
   return {
     x: clamp(
       referenceX +
