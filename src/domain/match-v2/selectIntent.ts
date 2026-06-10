@@ -170,8 +170,8 @@ export function selectIntent(
   if (
     state.half === 2 &&
     state.score.home === state.score.away &&
-    goalDistance < 6.2 &&
-    (decision.riskLevel === "high" || state.tick >= 30)
+    goalDistance < 5.1 &&
+    (decision.riskLevel === "high" || state.tick >= 32)
   ) {
     return {
       side,
