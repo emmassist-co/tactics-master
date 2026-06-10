@@ -2,6 +2,10 @@
 
 `tactics-master` is a same-device football tactics duel: two coaches each enter an opening prompt and a halftime prompt, then watch autonomous 5v5 teams play the ideas out on a grid field.
 
+## License
+
+MIT. See [LICENSE](LICENSE).
+
 ## Run
 
 ```bash
@@ -19,14 +23,16 @@ node scripts/run-coach-matchups.mjs
 node scripts/optimize-match-sim.mjs
 ```
 
-## Preview deploys
+## GitHub Pages deploys
 
 GitHub Actions publishes the app to GitHub Pages on every push to `main` and every pull request update.
 
-- Production-style review target: `https://emmassist-co.github.io/tactics-master/`
+- Production target: `https://emmassist-co.github.io/tactics-master/`
 - PR preview target: `https://emmassist-co.github.io/tactics-master/previews/pr-<PR_NUMBER>/`
 
-Reviewers can open the PR-specific URL directly after the `Preview Deploy` workflow finishes. The workflow job summary also prints the exact deployed URL for that run.
+Production deploys come from pushes to `main`. Pull requests publish nested previews into the same `gh-pages` branch so reviewers can inspect the exact branch build without disturbing production.
+
+Reviewers can open the PR-specific URL directly after the `Preview Deploy` workflow finishes. The workflow job summary prints the deployed URL for that run.
 
 To reproduce a preview build locally, run:
 
@@ -34,6 +40,15 @@ To reproduce a preview build locally, run:
 PREVIEW_BASE_PATH=/tactics-master/previews/pr-123/ pnpm build
 pnpm preview
 ```
+
+To reproduce the production Pages build locally, run:
+
+```bash
+PREVIEW_BASE_PATH=/tactics-master/ pnpm build
+pnpm preview
+```
+
+`package.json` keeps `"private": true` intentionally. That blocks accidental npm publication and does not affect GitHub repository visibility or GitHub Pages hosting.
 
 ## Optional live AI configuration
 
@@ -46,6 +61,8 @@ VITE_OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
 VITE_OPENROUTER_SITE_URL=http://localhost:4173
 VITE_OPENROUTER_APP_TITLE=tactics-master
 ```
+
+These variables are optional. The default static experience and GitHub Pages deploy do not require any private credentials.
 
 ## Current slice
 
@@ -110,3 +127,7 @@ It will:
 - reject attempts that touch tests, evaluator code, docs, or UI
 - run `pnpm test`, `pnpm build`, and the coach matchup suite in the attempt worktree
 - transplant only winning simulation diffs back into the main checkout
+
+## Public release
+
+Use [docs/testing/github-pages-release-checklist.md](docs/testing/github-pages-release-checklist.md) when making the repository public or rechecking the live Pages setup.
